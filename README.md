@@ -1,6 +1,10 @@
 #IMU collision detector
 
-This package reads data from 'imu9250' topic and publishes in 'imu9250_collision' topic a boolean value as String. 
+This package reads data from 'imu9250' topic and publishes in 'imu9250_collision' topic the following message. 
+```bash
+std_msgs/Bool collision
+std_msgs/Bool rollover
+```
 
 Collision detection force is set to 0.7 m/s^2 (being earth gravity 0.98 m/s^2). The value can be modified changing the following parameter in /scripts/collision.py .
 ```python
