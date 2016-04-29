@@ -14,9 +14,13 @@ if acc_z < 0:
 ```
 
 Posible values:
+
 'true' : collision detected
+
 'false' : no collision detected
+
 'rollover' : the sensor is upside down, the vehicle overturned
+
 Quick setup:
 ----- 
 ```bash
