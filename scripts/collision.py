@@ -75,7 +75,8 @@ def detector():
     pub = rospy.Publisher('imu9250_collision', Collision, queue_size=10)
     msg = Collision()
     rate = rospy.Rate(10)
-    impact_acceleration = 0.7 #m/s^2 (earth gravity 0.98)
+    impact_acceleration = 0.5 #m/s^2 (earth gravity 0.98)
+    impact_pitch = 0.05 #rads
     previous_pitch = 0
     while not rospy.is_shutdown():
         msg_imu = rospy.wait_for_message('/imu9250', Imu, timeout=5)
@@ -95,21 +96,13 @@ def detector():
         pitch = euler[1] #forward-backwards
         yaw = euler[2]
 
-        #roll = math.degrees(roll)
-        #pitch = math.degrees(pitch)
-        #yaw = math.degrees(yaw)
-
-        print("\n")
-        print(str(roll))
-        print(str(pitch))
-        print(str(yaw))
-
         collision = False
         rollover = False
         if abs(acc_x) > impact_acceleration:
-            print("ACC crash")
-            if abs(pitch-previous_pitch)>10:#
-                print("PITCH crash")
+            #print("ACC crash")
+            pitch_change = abs(pitch-previous_pitch)
+            if pitch_change>impact_pitch:
+                #print("PITCH crash")
                 collision = True
         if acc_z < 0:
             rollover = True
