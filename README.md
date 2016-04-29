@@ -1,8 +1,22 @@
 #IMU collision detector
 
-This package reads data from 'imu9250' topic and publishes in 'imu9250_collision' topic a boolean value as String.
-True means collision, False means no collision.
+This package reads data from 'imu9250' topic and publishes in 'imu9250_collision' topic a boolean value as String. 
 
+Collision detection force is set to 0.7 m/s^2 (being earth gravity 0.98 m/s^2). The value can be modified changing the following parameter in /scripts/collision.py .
+```python
+impact_acceleration = 0.7
+```
+
+Vehicle overturning is also detected, this functionality can be avoided removing this two lines from /scripts/collision.py:
+```python
+if acc_z < 0:
+    collision = "rollover"
+```
+
+Posible values:
+'true' : collision detected
+'false' : no collision detected
+'rollover' : the sensor is upside down, the vehicle overturned
 Quick setup:
 ----- 
 ```bash
