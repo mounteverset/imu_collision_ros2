@@ -99,21 +99,21 @@ def detector():
         #pitch = math.degrees(pitch)
         #yaw = math.degrees(yaw)
 
+        print("\n")
         print(str(roll))
         print(str(pitch))
         print(str(yaw))
-        print("\n")
-
-        #if previous_pitch>0:
-
-        previous_pitch = pitch
 
         collision = False
         rollover = False
         if abs(acc_x) > impact_acceleration:
-            collision = True
+            print("ACC crash")
+            if abs(pitch-previous_pitch)>10:#
+                print("PITCH crash")
+                collision = True
         if acc_z < 0:
             rollover = True
+        previous_pitch = pitch
         msg.collision.data = collision
         msg.rollover.data = rollover
         pub.publish(msg)
