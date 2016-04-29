@@ -12,11 +12,10 @@ def detector():
         msg_imu = rospy.wait_for_message('/imu9250', Imu, timeout=5)
 
         acc_x = msg_imu.linear_acceleration.x
-        acc_y = msg_imu.linear_acceleration.y
         acc_z = msg_imu.linear_acceleration.z
 
         collision = "false"
-        if abs(acc_x) > impact_acceleration or abs(acc_y) > impact_acceleration:
+        if abs(acc_x) > impact_acceleration:
             collision = "true"
         if acc_z < 0:
             collision = "rollover"
