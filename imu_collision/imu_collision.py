@@ -28,7 +28,7 @@ class CollisionDetector(Node):
         #self.publisher_ = self.create_publisher(Collision, 'collision', 10)
         self.collision_pub = self.create_publisher(Bool, "collision", 10)
         self.rollover_pub = self.create_publisher(Bool, "rollover", 10)
-        self.subscriber = self.create_subscription(Imu, "imu", self.imu_callback, 10)
+        self.subscriber = self.create_subscription(Imu, "imu_broadcaster/imu", self.imu_callback, 10)
 
         #self.collision_msg = Collision()
         self.collision_msg = Bool()
@@ -45,6 +45,8 @@ class CollisionDetector(Node):
     def imu_callback(self, msg):
         acc_z = msg.linear_acceleration.z
         acc_x = msg.linear_acceleration.x
+        self.collision_msg.data = False
+        self.rollover_msg.data = False
 
         quaternion = (
         msg.orientation.w,
@@ -60,14 +62,14 @@ class CollisionDetector(Node):
 
         if abs(acc_x) > self.impact_acceleration:
             #print("ACC crash")
-            pitch_change = abs(pitch-previous_pitch)
+            pitch_change = abs(pitch-self.previous_pitch)
             if pitch_change>self.impact_pitch:
                 #print("PITCH crash")
                 self.collision_msg.data = True
         if acc_z < 0:
-            self.rollover_msg = True
+            self.rollover_msg.data = True
 
-        previous_pitch = pitch
+        self.previous_pitch = pitch
         
         self.collision_pub.publish(self.collision_msg)
         self.rollover_pub.publish(self.rollover_msg)
